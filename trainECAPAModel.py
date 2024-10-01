@@ -39,8 +39,8 @@ parser.add_argument('--rir_path',   type=str,   default="../../ECAPA-TDNN/datase
 parser.add_argument('--speech_type', type = str, default="Neutral_speech", help='The speech type to train [Neutral_speech vs Emotional_speech]')
 
 parser.add_argument('--save_path',  type=str,   default="exps/exp3/model",                                     help='Path to save the score.txt and models')
-#parser.add_argument('--initial_model',  type=str,   default="../V1_0105/exps/exp1/model_0105.model",           help='Path of the initial_model')
-parser.add_argument('--initial_model',  type=str,   default="../V1_0125/exps/exp1/model_0125.model",           help='Path of the initial_model')
+parser.add_argument('--initial_model',  type=str,   default="../V1_0105/exps/exp1/model_0105.model",           help='Path of the initial_model')
+#parser.add_argument('--initial_model',  type=str,   default="../V1_0125/exps/exp1/model_0125.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V1_0130/exps/exp1/model_0130.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V2/v21/exps/exp1/model_0120.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V2/v22/exps/exp1/model_0122.model",           help='Path of the initial_model')
@@ -68,6 +68,7 @@ dataset_list_path = os.path.join(args.path, args.speech_type, "Amazon+Google_voi
 #dataset_list_path = os.path.join(args.path, "savee_data_list.txt") # for savee dataset
 #dataset_list_path = os.path.join(args.path, "ravdess_data_list.txt") # for ravdess dataset
 
+#dataset_path = os.path.join(args.path, args.speech_type, "Amazon+Google_voices/dataset_1/wav/mixed_chunk_sentence_test")
 dataset_path = os.path.join(args.path, args.speech_type, "Amazon+Google_voices/dataset_1/wav/mixed_chunk_sentence_16kHz")
 #dataset_path = os.path.join(args.path)
 
@@ -178,6 +179,13 @@ train_accuracies = [] # To store the best training accuracy for each fold
 fold_accuracies = []  # To store the best validation accuracy for each fold
 val_file = []
 
+#set the initial model
+init_model = None
+if ("V1" in args.initial_model.split("/")[1]) or ("V3" in args.initial_model.split("/")[1]):
+	init_model = args.initial_model.split("/")[1]
+else:
+	init_model = args.init_model.split("/")[0] + "/" + args.initial_model.split("/")[1]
+
 for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 
 	print(f"For FOLD {fold}")
@@ -224,12 +232,12 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 			
 			# Keep track of the best validation accuracy for this fold
 			if eval_acc > best_fold_val_acc:
-				with open('output_fold_%d'% fold, 'w') as f:
+				with open('metrics/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
 					f.writelines('Best model: model_fold_%d_epoch_%d\n'% (fold, epoch))
 					f.writelines('true_label, pred_label, file_name\n')
 					for idx in range(len(pred_label)):
 						f.writelines(str(true_label[idx]) + ',' + str(pred_label[idx]) + ',' + str(files[idx]) + '\n')
-				with open('tpr_fpr_output_fold_%d'% fold, 'w') as f:
+				with open('metrics/' + init_model + '/' + 'fold%d'%fold + '/' + 'tpr_fpr_output_fold_%d.txt'%fold, 'w') as f:
 					f.writelines('Best model: model_fold_%d_epoch_%d\n'% (fold, epoch))
 					for fp, tp in zip(FPRs, TPRs):
 						f.writelines(f'{fp}, {tp}\n')
@@ -257,8 +265,8 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 		epoch += 1
 
 	#plot confusion matrix after getting best epoch from current fold
-	file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/output_fold_%d"% fold
-	tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/tpr_fpr_output_fold_%d"% fold
+	file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
+	tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
 	plot_confusion_matrix(file)
 	plot_roc_curve(tpr_fpr_file, best_fold_auc)
 

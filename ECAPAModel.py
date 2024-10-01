@@ -10,8 +10,8 @@ import torch.nn.functional as F
 from tools import *
 from loss import AAMsoftmax
 from loss_fcn import FCNClassifier
-#from model_v105 import ECAPA_TDNN # for model V105
-from model_v125 import ECAPA_TDNN # for model V125
+from model_v105 import ECAPA_TDNN # for model V105
+#from model_v125 import ECAPA_TDNN # for model V125
 #from model_v130 import ECAPA_TDNN # for model V130
 #from model_v21 import ECAPA_TDNN # for model V2.1
 #from model_v22 import ECAPA_TDNN # for model V2.2
@@ -69,7 +69,7 @@ class ECAPAModel(nn.Module):
 				## checking speaker_embedding
 				#print("This is the speaker embedding:", speaker_embedding)
 
-				#nloss, prec, probabilities     = self.speaker_loss.forward(speaker_embedding, labels)
+				#nloss, prec, logits     = self.speaker_loss.forward(speaker_embedding, labels)
 				nloss, prec, logits     = self.fcn_loss.forward(speaker_embedding, labels)			
 				nloss.backward()
 				self.optim.step()
