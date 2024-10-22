@@ -31,7 +31,7 @@ parser.add_argument('--lr',         type=float, default=0.001,   help='Learning 
 parser.add_argument("--lr_decay",   type=float, default=0.97,    help='Learning rate decay every [test_step] epochs')
 
 ## Training and evaluation path/lists, save path
-parser.add_argument('--path', type=str,   default="/dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data",     help='The path of the training list, https://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/train_list.txt')
+parser.add_argument('--path', type=str,   default="dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data",     help='The path of the training list, https://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/train_list.txt')
 #parser.add_argument('--path', type=str,   default="../dataset/SAVEE_RESAMPLED",     help='The path of the training list, https://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/train_list.txt')
 #parser.add_argument('--path', type=str,   default="../dataset/RAVDESS_RESAMPLED",     help='The path of the training list, https://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/train_list.txt')
 parser.add_argument('--musan_path', type=str,   default="../../ECAPA-TDNN/dataset/musan_split",                    help='The path to the MUSAN set, eg:"/data08/Others/musan_split" in my case')
