@@ -39,16 +39,16 @@ parser.add_argument('--rir_path',   type=str,   default="../../ECAPA-TDNN/datase
 parser.add_argument('--speech_type', type = str, default="Neutral_speech", help='The speech type to train [Neutral_speech vs Emotional_speech]')
 
 parser.add_argument('--save_path',  type=str,   default="exps/exp3/model",                                     help='Path to save the score.txt and models')
-parser.add_argument('--initial_model',  type=str,   default="../V1_0105/exps/exp1/model_0105.model",           help='Path of the initial_model')
+#parser.add_argument('--initial_model',  type=str,   default="../V1_0105/exps/exp1/model_0105.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V1_0125/exps/exp1/model_0125.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V1_0130/exps/exp1/model_0130.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V2/v21/exps/exp1/model_0120.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V2/v22/exps/exp1/model_0122.model",           help='Path of the initial_model')
-#parser.add_argument('--initial_model',  type=str,   default="../V3/exps/exp1/model_0129.model",           help='Path of the initial_model')
+parser.add_argument('--initial_model',  type=str,   default="../V3/exps/exp1/model_0129.model",           help='Path of the initial_model')
 
 ## Model and Loss settings
-parser.add_argument('--C',       type=int,   default=1024,   help='Channel size for the speaker encoder')
-#parser.add_argument('--C',       type=int,   default=1008,   help='Channel size for the speaker encoder')  #Channel size = 1008 only when using model V3 
+#parser.add_argument('--C',       type=int,   default=1024,   help='Channel size for the speaker encoder')
+parser.add_argument('--C',       type=int,   default=1008,   help='Channel size for the speaker encoder')  #Channel size = 1008 only when using model V3 
 parser.add_argument('--m',       type=float, default=0.2,    help='Loss margin in AAM softmax')
 parser.add_argument('--s',       type=float, default=30,     help='Loss scale in AAM softmax')
 #parser.add_argument('--n_class', type=int,   default=7,   help='Number of unique emotions')
@@ -184,7 +184,7 @@ init_model = None
 if ("V1" in args.initial_model.split("/")[1]) or ("V3" in args.initial_model.split("/")[1]):
 	init_model = args.initial_model.split("/")[1]
 else:
-	init_model = args.init_model.split("/")[0] + "/" + args.initial_model.split("/")[1]
+	init_model = args.initial_model.split("/")[0] + "/" + args.initial_model.split("/")[1]
 
 for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 
@@ -273,8 +273,8 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 	#file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
 	#tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
 
-	plot_confusion_matrix(file)
-	plot_roc_curve(tpr_fpr_file, best_fold_auc)
+	plot_confusion_matrix(file, fold)
+	plot_roc_curve(tpr_fpr_file, best_fold_auc, fold)
 
 	# Save the best model for this fold
 	torch.save(best_model, args.model_save_path + f'/best_model_epoch{best_epoch}_fold{fold}.model')

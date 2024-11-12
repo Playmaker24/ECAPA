@@ -1,7 +1,7 @@
-Best model: model_fold_1_epoch_1
+Best model: model_fold_1_epoch_26
 true_label, pred_label, file_name
-0,0,Joanna/Joanna_8.wav
-1,0,Joanna/Joanna_2.wav
+0,1,Joanna/Joanna_8.wav
+1,1,Joanna/Joanna_2.wav
 1,0,Joanna/Joanna_29.wav
 0,0,E/E_22.wav
 1,0,J/J_9.wav
@@ -15,7 +15,7 @@ true_label, pred_label, file_name
 0,0,E/E_29.wav
 1,0,Kendra/Kendra_8.wav
 0,0,Kendra/Kendra_31.wav
-1,0,Kevin/Kevin_14.wav
+1,1,Kevin/Kevin_14.wav
 0,0,Kendra/Kendra_24.wav
 1,0,Joey/Joey_16.wav
 0,0,E/E_7.wav
@@ -31,10 +31,10 @@ true_label, pred_label, file_name
 0,0,H/H_15.wav
 1,0,J/J_30.wav
 0,0,B/B_17.wav
-1,1,Kevin/Kevin_2.wav
+1,0,Kevin/Kevin_2.wav
 0,0,J/J_23.wav
 0,0,Joey/Joey_23.wav
-1,0,Joanna/Joanna_32.wav
+1,1,Joanna/Joanna_32.wav
 1,0,Joey/Joey_17.wav
 1,1,Kevin/Kevin_29.wav
 1,0,E/E_12.wav
@@ -48,12 +48,12 @@ true_label, pred_label, file_name
 0,0,J/J_15.wav
 1,0,H/H_19.wav
 1,1,Kevin/Kevin_30.wav
-1,1,Kevin/Kevin_16.wav
-1,0,Joanna/Joanna_27.wav
+1,0,Kevin/Kevin_16.wav
+1,1,Joanna/Joanna_27.wav
 0,0,Joey/Joey_8.wav
-1,0,Joanna/Joanna_22.wav
+1,1,Joanna/Joanna_22.wav
 0,0,Kendra/Kendra_19.wav
-0,0,J/J_20.wav
+0,1,J/J_20.wav
 1,0,J/J_26.wav
 0,0,Joey/Joey_11.wav
-1,0,Joanna/Joanna_20.wav
+1,1,Joanna/Joanna_20.wav

@@ -115,11 +115,12 @@ def accuracy(output, target, topk=(1,)):
 	return res
 
 #def plot_confusion_matrix(true_label, pred_label, class_names, title="Confusion Matrix"):
-def plot_confusion_matrix(file):
+def plot_confusion_matrix(file, fold):
     title = None
     model = None
     true_label = []
     pred_label = []
+    save_path = new_path = file.rsplit(f"output_fold_{fold}.txt", 1)[0]
     class_names = ['Negative', 'Positive']
     with open (file, 'r') as f: 
         model = f.readline().strip()
@@ -135,14 +136,17 @@ def plot_confusion_matrix(file):
     plt.title(title)
     plt.xlabel('Predicted')
     plt.ylabel('True')
-    plt.show()
+    #plt.show()
+    plt.savefig(save_path + 'cm.png')
+    plt.close()
 
 #def plot_roc_curve(fpr, tpr, roc_auc):
-def plot_roc_curve(tpr_fpr_file, roc_auc):
+def plot_roc_curve(tpr_fpr_file, roc_auc, fold):
     title = None
     model = None
     tpr = []
     fpr = []
+    save_path = new_path = tpr_fpr_file.rsplit(f"tpr_fpr_output_fold_{fold}.txt", 1)[0]
     with open (tpr_fpr_file, 'r') as f:
         model = f.readline().strip()
         for line in f:
@@ -158,4 +162,6 @@ def plot_roc_curve(tpr_fpr_file, roc_auc):
     plt.ylabel('True Positive Rate (TPR)')
     plt.title(title)
     plt.legend(loc="lower right")
-    plt.show()
+    #plt.show()
+    plt.savefig(save_path + 'roc.png')
+    plt.close()
