@@ -39,16 +39,16 @@ parser.add_argument('--rir_path',   type=str,   default="../../ECAPA-TDNN/datase
 parser.add_argument('--speech_type', type = str, default="Neutral_speech", help='The speech type to train [Neutral_speech vs Emotional_speech]')
 
 parser.add_argument('--save_path',  type=str,   default="exps/exp3/model",                                     help='Path to save the score.txt and models')
-#parser.add_argument('--initial_model',  type=str,   default="../V1_0105/exps/exp1/model_0105.model",           help='Path of the initial_model')
+parser.add_argument('--initial_model',  type=str,   default="../V1_0105/exps/exp1/model_0105.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V1_0125/exps/exp1/model_0125.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V1_0130/exps/exp1/model_0130.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V2/v21/exps/exp1/model_0120.model",           help='Path of the initial_model')
 #parser.add_argument('--initial_model',  type=str,   default="../V2/v22/exps/exp1/model_0122.model",           help='Path of the initial_model')
-parser.add_argument('--initial_model',  type=str,   default="../V3/exps/exp1/model_0129.model",           help='Path of the initial_model')
+#parser.add_argument('--initial_model',  type=str,   default="../V3/exps/exp1/model_0129.model",           help='Path of the initial_model')
 
 ## Model and Loss settings
-#parser.add_argument('--C',       type=int,   default=1024,   help='Channel size for the speaker encoder')
-parser.add_argument('--C',       type=int,   default=1008,   help='Channel size for the speaker encoder')  #Channel size = 1008 only when using model V3 
+parser.add_argument('--C',       type=int,   default=1024,   help='Channel size for the speaker encoder')
+#parser.add_argument('--C',       type=int,   default=1008,   help='Channel size for the speaker encoder')  #Channel size = 1008 only when using model V3 
 parser.add_argument('--m',       type=float, default=0.2,    help='Loss margin in AAM softmax')
 parser.add_argument('--s',       type=float, default=30,     help='Loss scale in AAM softmax')
 #parser.add_argument('--n_class', type=int,   default=7,   help='Number of unique emotions')
@@ -127,7 +127,8 @@ label_1_count = 0
 score_file = open(args.score_save_path, "a+")
 		
 # Read the lines from the file into a list
-with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data/Neutral_speech/Amazon+Google_voices/train_list_one_hot_sentencev3_aug_edited.txt', 'r') as file:
+with open(dataset_list_path, 'r') as file:
+#with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data/Neutral_speech/Amazon+Google_voices/train_list_one_hot_sentencev3_aug_edited.txt', 'r') as file:
 #with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data/Neutral_speech/Amazon+Google_voices/competence_train_list_one_hot_sentencev3_aug_edited.txt', 'r') as file:
 #with open('../dataset/SAVEE/AudioData/savee_data_list.txt', 'r') as file:
 #with open('../dataset/SAVEE/AudioData/ravdess_data_list.txt', 'r') as file:
@@ -137,7 +138,8 @@ with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data
 random.shuffle(lines)
 
 # Write the shuffled list back into the file
-with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data/Neutral_speech/Amazon+Google_voices/train_list_one_hot_sentencev3_aug_edited.txt', 'w') as file:
+with open(dataset_list_path, 'w') as file:
+#with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data/Neutral_speech/Amazon+Google_voices/train_list_one_hot_sentencev3_aug_edited.txt', 'w') as file:
 #with open('../dataset/Speech_data_forSSC_copy/Speech_data_forSSC_2.0/Speech_data/Neutral_speech/Amazon+Google_voices/competence_train_list_one_hot_sentencev3_aug_edited.txt', 'w') as file:
 #with open('../dataset/SAVEE/AudioData/savee_data_list.txt', 'w') as file:
 #with open('../dataset/SAVEE/AudioData/ravdess_data_list.txt', 'w') as file:
@@ -232,14 +234,18 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 			
 			# Keep track of the best validation accuracy for this fold
 			if eval_acc > best_fold_val_acc:
-				with open('metrics/warmth/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
-				#with open('metrics/competence/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
+				#with open('metrics/freeze/warmth/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
+				#with open('metrics/freeze/competence/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
+				with open('metrics/scratch/warmth/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
+				#with open('metrics/scratch/competence/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
 					f.writelines('Best model: model_fold_%d_epoch_%d\n'% (fold, epoch))
 					f.writelines('true_label, pred_label, file_name\n')
 					for idx in range(len(pred_label)):
 						f.writelines(str(true_label[idx]) + ',' + str(pred_label[idx]) + ',' + str(files[idx]) + '\n')
-				with open('metrics/warmth/' + init_model + '/' + 'fold%d'%fold + '/' + 'tpr_fpr_output_fold_%d.txt'%fold, 'w') as f:
-				#with open('metrics/competence/' + init_model + '/' + 'fold%d'%fold + '/' + 'tpr_fpr_output_fold_%d.txt'%fold, 'w') as f:
+				#with open('metrics/freeze/warmth/' + init_model + '/' + 'fold%d'%fold + '/' + 'tpr_fpr_output_fold_%d.txt'%fold, 'w') as f:
+				#with open('metrics/freeze/competence/' + init_model + '/' + 'fold%d'%fold + '/' + 'tpr_fpr_output_fold_%d.txt'%fold, 'w') as f:
+				with open('metrics/scratch/warmth/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
+				#with open('metrics/scratch/competence/' + init_model + '/' + 'fold%d'%fold + '/' + 'output_fold_%d.txt'%fold, 'w') as f:
 					f.writelines('Best model: model_fold_%d_epoch_%d\n'% (fold, epoch))
 					for fp, tp in zip(FPRs, TPRs):
 						f.writelines(f'{fp}, {tp}\n')
@@ -267,11 +273,15 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(data)):
 		epoch += 1
 
 	#plot confusion matrix after getting best epoch from current fold
-	file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/warmth/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
-	tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/warmth/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
+	#file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/freeze/warmth/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
+	#tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/freeze/warmth/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
+	file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/scratch/warmth/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
+	tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/scratch/warmth/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
 
-	#file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
-	#tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
+	#file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/freeze/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
+	#tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/freeze/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
+	#file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/scratch/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "output_fold_%d.txt"%fold
+	#tpr_fpr_file = f"/home/ray/Abschlussarbeit/Raymond/ECAPA/metrics/scratch/competence/" + init_model + '/' + 'fold%d'%fold + '/' + "tpr_fpr_output_fold_%d.txt"%fold
 
 	plot_confusion_matrix(file, fold)
 	plot_roc_curve(tpr_fpr_file, best_fold_auc, fold)

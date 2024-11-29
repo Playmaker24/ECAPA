@@ -10,12 +10,12 @@ import torch.nn.functional as F
 from tools import *
 from loss import AAMsoftmax
 from loss_fcn import FCNClassifier
-#from model_v105 import ECAPA_TDNN # for model V105
+from model_v105 import ECAPA_TDNN # for model V105
 #from model_v125 import ECAPA_TDNN # for model V125
 #from model_v130 import ECAPA_TDNN # for model V130
 #from model_v21 import ECAPA_TDNN # for model V2.1
 #from model_v22 import ECAPA_TDNN # for model V2.2
-from model_v3 import ECAPA_TDNN # for model V3
+#from model_v3 import ECAPA_TDNN # for model V3
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -27,11 +27,11 @@ class ECAPAModel(nn.Module):
 		self.speaker_encoder = ECAPA_TDNN(C = C).cuda()
 
 		## HERE FREEZING THE PARAMETER FOR OTHER LAYERS, EXCEPT FC LAYER
-		print("Start freezing layers...")
-		for name, param in self.speaker_encoder.named_parameters():
-			if "fc6" not in name:
-				param.requires_grad = False
-		print("Complete freezing...")
+		#print("Start freezing layers...")
+		#for name, param in self.speaker_encoder.named_parameters():
+			#if "fc6" not in name:
+		#	param.requires_grad = False
+		#print("Complete freezing...")
 
 		## Classifier
 		self.speaker_loss    = AAMsoftmax(n_class = n_class, m = m, s = s).cuda()
